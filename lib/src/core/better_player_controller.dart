@@ -776,7 +776,7 @@ class BetterPlayerController {
     final possibleCacheServerErrors = [
       "resource unavailable",
       "could not connect to the server",
-      // "the operation couldnt be completed",
+      "the operation couldnt be completed",
     ];
 
     final ignorableErrorLogs = [
@@ -809,9 +809,7 @@ class BetterPlayerController {
         ),
       );
 
-      bool isNotPlaying = !(isPlaying() ?? false);
-
-      if (isResourceError && isNotPlaying && !hasCachingResourceError) {
+      if (isResourceError && !hasCachingResourceError) {
         hasCachingResourceError = true;
 
         print(

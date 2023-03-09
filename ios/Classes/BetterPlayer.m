@@ -65,29 +65,29 @@ AVPictureInPictureController *_pipController;
                                                      name:AVPlayerItemDidPlayToEndTimeNotification
                                                    object:item];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                         selector:@selector(handleErrorLogEntry:)
-                                             name:AVPlayerItemNewErrorLogEntryNotification
-                                           object:nil];
+        // [[NSNotificationCenter defaultCenter] addObserver:self
+        //                                  selector:@selector(handleErrorLogEntry:)
+        //                                      name:AVPlayerItemNewErrorLogEntryNotification
+        //                                    object:nil];
 
         self._observersAdded = true;
     }
 }
 
-- (void)handleErrorLogEntry:(NSNotification *)notification {
-    AVPlayerItem *playerItem = notification.object;
-    AVPlayerItemErrorLog *errorLog = playerItem.errorLog;
-    AVPlayerItemErrorLogEvent *lastEvent = [errorLog.events lastObject];
-    NSString *lastErrorComment = lastEvent.errorComment;
+// - (void)handleErrorLogEntry:(NSNotification *)notification {
+//     AVPlayerItem *playerItem = notification.object;
+//     AVPlayerItemErrorLog *errorLog = playerItem.errorLog;
+//     AVPlayerItemErrorLogEvent *lastEvent = [errorLog.events lastObject];
+//     NSString *lastErrorComment = lastEvent.errorComment;
 
-    if (_eventSink != nil) {
-        _eventSink([FlutterError
-                    errorWithCode:@"VideoError"
-                    message:[@"Failed to load video: " stringByAppendingString:lastErrorComment]
-                    details:nil]);
-    }
+//     if (_eventSink != nil) {
+//         _eventSink([FlutterError
+//                     errorWithCode:@"VideoError"
+//                     message:[@"Failed to load video: " stringByAppendingString:lastErrorComment]
+//                     details:nil]);
+//     }
 
-}
+// }
 
 - (void)clear {
     _isInitialized = false;
@@ -125,9 +125,9 @@ AVPictureInPictureController *_pipController;
         [[_player currentItem] removeObserver:self
                                    forKeyPath:@"playbackBufferFull"
                                       context:playbackBufferFullContext];
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                name:AVPlayerItemNewErrorLogEntryNotification
-                                              object:nil];
+        // [[NSNotificationCenter defaultCenter] removeObserver:self
+        //                                         name:AVPlayerItemNewErrorLogEntryNotification
+        //                                       object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self];
 
         self._observersAdded = false;
