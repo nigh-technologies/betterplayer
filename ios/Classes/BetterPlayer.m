@@ -103,9 +103,11 @@ AVPictureInPictureController *_pipController;
         return;
     }
 
+
     [self removeObservers];
     AVAsset* asset = [_player.currentItem asset];
     [asset cancelLoading];
+    [_player replaceCurrentItemWithPlayerItem:nil];
 }
 
 - (void) removeObservers{
