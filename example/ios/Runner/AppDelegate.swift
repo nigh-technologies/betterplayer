@@ -1,9 +1,9 @@
 import UIKit
 import Flutter
-import Firebase
-import FirebaseAnalytics
-import FirebaseCore
-import FirebaseAuth
+// import Firebase
+// import FirebaseAnalytics
+// import FirebaseCore
+// import FirebaseAuth
 
 
 @UIApplicationMain
@@ -12,8 +12,8 @@ import FirebaseAuth
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    FirebaseApp.configure()
-    Analytics.setAnalyticsCollectionEnabled(true)
+    // FirebaseApp.configure()
+    // Analytics.setAnalyticsCollectionEnabled(true)
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
