@@ -103,6 +103,7 @@ AVPictureInPictureController *_pipController;
         return;
     }
 
+
     [self removeObservers];
     AVAsset* asset = [_player.currentItem asset];
     [asset cancelLoading];
@@ -138,6 +139,7 @@ AVPictureInPictureController *_pipController;
     if (_isLooping) {
         AVPlayerItem* p = [notification object];
         [p seekToTime:kCMTimeZero completionHandler:nil];
+        _eventSink(@{@"event" : @"completed", @"key" : _key});
     } else {
         if (_eventSink) {
             _eventSink(@{@"event" : @"completed", @"key" : _key});
@@ -785,6 +787,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
     [_eventChannel setStreamHandler:nil];
     [self disablePictureInPicture];
     [self setPictureInPicture:false];
+    [_player replaceCurrentItemWithPlayerItem:nil];
     _disposed = true;
 }
 
