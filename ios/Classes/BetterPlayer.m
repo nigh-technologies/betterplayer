@@ -258,6 +258,8 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 }
 
 - (void)setDataSourcePlayerItem:(AVPlayerItem*)item withKey:(NSString*)key{
+    NSLog(@"rpc: setDataSourcePlayerItem key: %@", key);
+
     _key = key;
     _stalledCount = 0;
     _isStalledCheckStarted = false;
@@ -266,11 +268,14 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 
     AVAsset* asset = [item asset];
     void (^assetCompletionHandler)(void) = ^{
+        NSLog(@"rpc: assetCompletionHandler key: %@", key);
         if ([asset statusOfValueForKey:@"tracks" error:nil] == AVKeyValueStatusLoaded) {
             NSArray* tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+            NSLog(@"rpc: assetCompletionHandler AVKeyValueStatusLoaded - track count %d", [tracks count]);
             if ([tracks count] > 0) {
                 AVAssetTrack* videoTrack = tracks[0];
                 void (^trackCompletionHandler)(void) = ^{
+                    NSLog(@"rpc: trackCompletionHandler key: %@", key);
                     if (self->_disposed) return;
                     if ([videoTrack statusOfValueForKey:@"preferredTransform"
                                                   error:nil] == AVKeyValueStatusLoaded) {
@@ -464,6 +469,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 }
 
 - (void)onReadyToPlay {
+    NSLog(@"rpc: onReadyToPlay: %@", _key);
     if (_eventSink && !_isInitialized && _key) {
         if (!_player.currentItem) {
             return;
@@ -479,6 +485,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 
         AVAsset *asset = _player.currentItem.asset;
         bool onlyAudio =  [[asset tracksWithMediaType:AVMediaTypeVideo] count] == 0;
+        NSLog(@"rpc: onReadyToPlay onlyAudio: %d width %f height %f", onlyAudio, width, height);
 
         // The player has not yet initialized.
         if (!onlyAudio && height == CGSizeZero.height && width == CGSizeZero.width) {
@@ -492,6 +499,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 
         //Fix from https://github.com/flutter/flutter/issues/66413
         AVPlayerItemTrack *track = [self.player currentItem].tracks.firstObject;
+        NSLog(@"rpc: onReadyToPlay track count: %d", [self.player currentItem].tracks.count);
         CGSize naturalSize = track.assetTrack.naturalSize;
         CGAffineTransform prefTrans = track.assetTrack.preferredTransform;
         CGSize realSize = CGSizeApplyAffineTransform(naturalSize, prefTrans);
@@ -514,6 +522,24 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 }
 
 - (void)play {
+    NSArray<AVPlayerItemTrack *> *tracks = [self.player currentItem].tracks;
+    NSLog(@"rpc: ptc: %ld", tracks.count);
+    for (int i = 0; i < tracks.count; i++) {
+        AVPlayerItemTrack *track = tracks[i];
+        AVAssetTrack *assetTrack = track.assetTrack;
+        NSLog(@"rpc: pt %d: fr: %f enabled: %d", i, track.currentVideoFrameRate, track.enabled);
+        NSLog(@"rpc: pat mt: %@, e: %d, d: %@, dd: %@, p: %d, ip: %d",
+              assetTrack.mediaType, assetTrack.enabled, assetTrack.description,
+              assetTrack.debugDescription, assetTrack.playable,
+              assetTrack.isProxy);
+        for (int j = 0; j < assetTrack.metadata.count; j++) {
+            NSLog(@"rpc: pm: %d %@ %@", j, assetTrack.metadata[j].commonKey, assetTrack.metadata[j].stringValue);
+        }
+        for (int j = 0; j < assetTrack.formatDescriptions.count; j++) {
+            NSLog(@"rpc: pfd: %d %@", j, assetTrack.formatDescriptions[j]);
+        }
+    }
+
     _stalledCount = 0;
     _isStalledCheckStarted = false;
     _isPlaying = true;
