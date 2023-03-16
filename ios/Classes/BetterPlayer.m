@@ -318,7 +318,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
                       ofObject:(id)object
                         change:(NSDictionary*)change
                        context:(void*)context {
-
+    
     if ([path isEqualToString:@"rate"]) {
         if (@available(iOS 10.0, *)) {
             if (_pipController.pictureInPictureActive == true){
@@ -494,6 +494,48 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 - (void)pause {
     _isPlaying = false;
     [self updatePlayingState];
+    
+    AVPlayerItem *currentItem = [self.player currentItem];
+    
+    NSArray<AVPlayerItemTrack *> *tracks = currentItem.tracks;
+    NSLog(@"rpc: ptc: %ld", tracks.count);
+    for (int i = 0; i < tracks.count; i++) {
+        AVPlayerItemTrack *track = tracks[i];
+        AVAssetTrack *assetTrack = track.assetTrack;
+        NSLog(@"rpc: pt %d: fr: %f enabled: %d", i, track.currentVideoFrameRate, track.enabled);
+        NSLog(@"rpc: pat mt: %@, e: %d, d: %@, dd: %@, p: %d, ip: %d",
+              assetTrack.mediaType, assetTrack.enabled, assetTrack.description,
+              assetTrack.debugDescription, assetTrack.playable,
+              assetTrack.isProxy);
+        for (int j = 0; j < assetTrack.metadata.count; j++) {
+            NSLog(@"rpc: pm: %d %@ %@", j, assetTrack.metadata[j].commonKey, assetTrack.metadata[j].stringValue);
+        }
+        for (int j = 0; j < assetTrack.formatDescriptions.count; j++) {
+            NSLog(@"rpc: pfd: %d %@", j, assetTrack.formatDescriptions[j]);
+        }
+    }
+    
+    AVPlayerItemAccessLog *accessLog = currentItem.accessLog;
+    NSArray<AVPlayerItemAccessLogEvent *> *accessLogEvents = accessLog.events;
+    NSLog(@"rpc: ale: %ld", accessLogEvents.count);
+//    for (int i = 0; i < accessLogEvents.count; i++) {
+//        AVPlayerItemAccessLogEvent *log = accessLogEvents[i];
+//        NSLog(@"rpc: al %d %@", i, log.);
+//    }
+    
+    AVPlayerItemErrorLog *errorLog = currentItem.errorLog;
+    NSArray<AVPlayerItemErrorLogEvent *> *errorLogEvents = errorLog.events;
+    NSLog(@"rpc: ele: %ld", errorLogEvents.count);
+    for (int i = 0; i < errorLogEvents.count; i++) {
+        AVPlayerItemErrorLogEvent *log = errorLogEvents[i];
+        NSLog(@"rpc: ELI: %@ %@ %ld %@ %@", log.date, log.URI, (long) log.errorStatusCode, log.errorDomain, log.errorComment);    }
+    
+    NSArray<AVPlayerItemOutput *> *outputs = currentItem.outputs;
+    NSLog(@"rpc: outputs: %ld", outputs.count);
+    for (int i = 0; i < outputs.count; i++) {
+        AVPlayerItemOutput *output = outputs[i];
+        NSLog(@"rpc: output %d %@", i, output.description);
+    }
 }
 
 - (int64_t)position {

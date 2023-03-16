@@ -132,7 +132,7 @@ class _MultiControllerFeedState extends State<MultiControllerFeed> {
         children: [
           Spacer(),
           SimpleButton(
-            text: 'Multi-Controller: Back to Selector',
+            text: 'Multi-Controller Better Player: Back to Selector',
             onTap: widget.onReset,
           ),
           SimpleButton(
@@ -149,14 +149,14 @@ class _MultiControllerFeedState extends State<MultiControllerFeed> {
               }
             },
           ),
-          VideoProgressIndicator(
-            activeController!.videoPlayerController!,
-            allowScrubbing: false,
-            colors: VideoProgressColors(
-              backgroundColor: Colors.white54,
-              playedColor: Colors.white,
-            ),
-          ),
+          // VideoProgressIndicator(
+          //   activeController!.videoPlayerController!,
+          //   allowScrubbing: false,
+          //   colors: VideoProgressColors(
+          //     backgroundColor: Colors.white54,
+          //     playedColor: Colors.white,
+          //   ),
+          // ),
           BetterPlayer(controller: activeController!),
           Spacer(),
         ],

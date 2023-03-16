@@ -12,7 +12,7 @@ class NighVideoPlayerController extends BetterPlayerController {
       : super(playerConfig, betterPlayerDataSource: dataSource);
 
   factory NighVideoPlayerController.network(String videoUrl) {
-    bool canUseCache = true;
+    bool canUseCache = false;
 
     final BetterPlayerConfiguration playerConfig = BetterPlayerConfiguration(
       looping: true,

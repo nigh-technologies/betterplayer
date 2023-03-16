@@ -119,7 +119,7 @@ class _SingleControllerFeedState extends State<SingleControllerFeed> {
         children: [
           Spacer(),
           SimpleButton(
-            text: 'Single-Controller: Back to Selector',
+            text: 'Single-Controller Better Player: Back to Selector',
             onTap: widget.onReset,
           ),
           SimpleButton(
@@ -136,14 +136,14 @@ class _SingleControllerFeedState extends State<SingleControllerFeed> {
               }
             },
           ),
-          VideoProgressIndicator(
-            activeController!.videoPlayerController!,
-            allowScrubbing: false,
-            colors: VideoProgressColors(
-              backgroundColor: Colors.white54,
-              playedColor: Colors.white,
-            ),
-          ),
+          // VideoProgressIndicator(
+          //   activeController!.videoPlayerController!,
+          //   allowScrubbing: false,
+          //   colors: VideoProgressColors(
+          //     backgroundColor: Colors.white54,
+          //     playedColor: Colors.white,
+          //   ),
+          // ),
           BetterPlayer(controller: activeController!),
           Spacer(),
         ],
