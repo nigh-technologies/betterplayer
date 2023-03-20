@@ -880,7 +880,9 @@ class _VideoProgressIndicatorState extends State<VideoProgressIndicator> {
   @override
   void initState() {
     super.initState();
-    controller.addListener(listener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.addListener(listener);
+    });
   }
 
   @override
